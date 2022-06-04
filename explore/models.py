@@ -33,3 +33,13 @@ class Track(models):
     featured_artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     genre = models.CharField(max_length=140)
     instruments =  models.CharField(max_length=140)
+
+class Blog(models.Model):
+    # Will try to scrape Artists, Labels, from site
+    description = models.CharField(max_length=50)
+    link = models.CharField(max_length=50)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
+    track = models.ForeignKey(Track, on_delete=models.CASCADE)
+    producer = models.ForeignKey(Producer, on_delete=models.CASCADE)
