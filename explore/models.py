@@ -15,6 +15,7 @@ class Artist(models.Model):
 
 class RecordCompany(models.Model):
     name = models.CharField(max_length=140)
+    artists = models.ForeignKey(Artist, on_delete=models.CASCADE)
 
 class Producer(models.Model):
     name = models.CharField(max_length=140)
@@ -23,14 +24,12 @@ class Producer(models.Model):
 class Album(models.Model):
     name = models.CharField(max_length=140)
     primary_artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
-    featured_artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     producer = models.ForeignKey(Producer, on_delete=models.CASCADE)
     
 
-class Track(models):
+class Track(models.Model):
     name = models.CharField(max_length=140)
     primary_artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
-    featured_artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     genre = models.CharField(max_length=140)
     instruments =  models.CharField(max_length=140)
 

@@ -20,4 +20,7 @@ import explore.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', explore.views.index, name='index'),
+    path('spotify_login', explore.views.spotify_login, name='login'),
+    path('callback', explore.views.get_spotify_access_token, name='get_spotify_access_token' ),
+    path('top_artists', explore.views.get_top_artists, name='top_artists')
 ]
