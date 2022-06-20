@@ -22,5 +22,6 @@ urlpatterns = [
     path('', explore.views.index, name='index'),
     path('spotify_login', explore.views.spotify_login, name='login'),
     path('callback', explore.views.get_spotify_access_token, name='get_spotify_access_token' ),
-    path('top_artists', explore.views.get_top_artists, name='top_artists')
+    path('top_artists', explore.views.get_top_artists, name='top_artists'),
+    path('create_random_playlist', explore.views.create_random_playlist, name='create_random_playlist')
 ]

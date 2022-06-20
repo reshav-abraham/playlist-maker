@@ -33,3 +33,4 @@ def create_random_playlist(request):
     # by random genre. Will refactor
     artists = scraper.scrape_artists()
     spotify_client.create_playlist_by_artist(artists)
+    return HttpResponse("something")

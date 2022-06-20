@@ -23,7 +23,7 @@ class BandCampScraper(BaseScraper):
         artists = set(artists)
         if len(artists) > 4:
             return sample(artists, 4)
-        return artists
+        return list(artists)
     
     def scrape_artists(self):
         # good oporutunity for multiprocessing
