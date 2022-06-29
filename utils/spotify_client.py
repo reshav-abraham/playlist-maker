@@ -1,12 +1,12 @@
 import requests
-import os
+import os, random
 from utils.helpers import generate_random_string
 from urllib.parse import urlencode
 
 class SpotifyClient:
     def __init__(self):
         self.client_id = os.environ.get("SPOTIFY_CLIENT_ID")
-        self.client_secret = client_id = os.environ.get("SPOTIFY_CLIENT_SECRET")
+        self.client_secret = os.environ.get("SPOTIFY_CLIENT_SECRET")
         self.redirect_uri = os.environ.get("SPOTIFY_APPROVED_REDIRECT")
         self.scope = os.environ.get("SPOTIFY_SCOPES")
         self.access_token = ""
@@ -68,7 +68,10 @@ class SpotifyClient:
         if response.status_code != 200 or len(response.json()["tracks"]) == 0:
             return
         print("get_top_track", response.json()["tracks"][0]["id"])
-        return response.json()["tracks"][0]["id"]
+        
+        len(response.json()["tracks"])
+        random_track = random.randint(0, len(response.json()["tracks"])-1)
+        return response.json()["tracks"][random_track]["id"]
     
     def add_to_playlist(self, playlist_id, track_ids):
         encoded_tracks = urlencode({"uris": track_ids})
