@@ -7,9 +7,10 @@ class BandCampScraper(BaseScraper):
     def __init__(self, genre_settings=[]):
         super().__init__()
         self.url = "https://bandcamp.com/"
-        self.genres = sample(GENRES, 12) if len(genre_settings) == 0 else genre_settings
+        self.genres = sample(GENRES, 4) if len(genre_settings) == 0 else genre_settings
 
     def get_artists_by_genre(self, genre):
+        print("genre", genre)
         genre_url = f"{self.url}/tag/{genre}"
         html_data = self.get_html_data(genre_url)
 
@@ -22,7 +23,8 @@ class BandCampScraper(BaseScraper):
         # will probably filter for good data
         artists = set(artists)
         if len(artists) > 4:
-            return sample(artists, 3)
+            return sample(artists, 6)
+        print(list(artists))
         return list(artists)
     
     def scrape_artists(self):
