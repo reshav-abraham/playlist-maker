@@ -10,6 +10,7 @@ class BandCampScraper(BaseScraper):
         self.genres = sample(GENRES, 4) if len(genre_settings) == 0 else genre_settings
 
     def get_artists_by_genre(self, genre):
+        print("genre", genre)
         genre_url = f"{self.url}/tag/{genre}"
         html_data = self.get_html_data(genre_url)
 
@@ -22,10 +23,11 @@ class BandCampScraper(BaseScraper):
         # will probably filter for good data
         artists = set(artists)
         if len(artists) > 4:
-            return sample(artists, 4)
+            return sample(artists, 6)
+        print(list(artists))
         return list(artists)
     
     def scrape_artists(self):
         # good oporutunity for multiprocessing
         # will loop for now
-        return [self.get_artists_by_genre(genre) for genre in self.genres]
+        return [self.get_artists_by_genre(genre) for genre in sample(GENRES, 12)]
