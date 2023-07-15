@@ -41,8 +41,12 @@ class SpotifyClient:
     
     def get_spotify_top_artists(self):
         url = "https://api.spotify.com/v1/me/top/artists"
-        # print("headers", url, self.headers)
-        print(url, self.headers)
+        response = requests.get(url, headers=self.headers)
+        # print("123", response.json())
+        return response.json()
+    
+    def get_me(self):
+        url = "https://api.spotify.com/v1/me"
         response = requests.get(url, headers=self.headers)
         # print("123", response.json())
         return response.json()
