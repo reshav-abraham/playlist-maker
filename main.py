@@ -1,12 +1,25 @@
 from typing import Union
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from utils.spotify_client import SpotifyClient
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 spotify_client = SpotifyClient()
 
 app = FastAPI()
 
+templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/home/{id}", response_class=HTMLResponse)
+async def read_item(request: Request, id: str):
+    return templates.TemplateResponse("items.html", {"request": request, "id": id})
+
+
+# @app.get("/home")
+# def home():
+#     return StaticFiles('index.html')
 
 @app.get("/callback")
 def read_root(code):
