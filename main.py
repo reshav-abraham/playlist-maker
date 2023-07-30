@@ -21,6 +21,12 @@ async def read_item(request: Request, id: str):
 # def home():
 #     return StaticFiles('index.html')
 
+
+# create routes for views
+# create api for user management
+# create api for playlist/music api
+# create api for social interactions
+
 @app.get("/callback")
 def read_root(code):
     spotify_client.get_spotify_access_token(code)
