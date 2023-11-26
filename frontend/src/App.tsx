@@ -1,11 +1,16 @@
 import Upload from './Upload';
 
+
 function App() {
-  console.log("app!");
+  function getLogInRedirect(){
+    fetch("http://localhost:8888");
+    return "asdfg"
+  }
   return (
     <>
       <div className="dashboard">
-        <p>a component</p>
+        <button onClick={getLogInRedirect}>Log in</button>
+        <button>Sign in</button>
       </div>
       <div id="upload"></div>
       <Upload></Upload>

@@ -2,6 +2,7 @@ import requests
 import os, random
 from utils.helpers import generate_random_string
 from urllib.parse import urlencode
+from functools import cache
 
 class SpotifyClient:
     def __init__(self):
@@ -11,6 +12,17 @@ class SpotifyClient:
         self.scope = os.environ.get("SPOTIFY_SCOPES")
         self.access_token = ""
     
+    def check_spotify_headers(func):
+        def function_wrapper(spotify_client):
+            headers = getattr(spotify_client, "headers", "")
+            if not headers:
+                # check cache for session
+                # raise error to perform redirect again
+                access_token = spotify_client.get_spotify_access_token("")
+                spotify_client.headers = ""
+            return func(spotify_client)
+        return function_wrapper
+
     def get_login_redirect(self):
         state = generate_random_string(16);
         query_params = urlencode({
@@ -35,22 +47,28 @@ class SpotifyClient:
             "client_secret": client_secret,
         }
         response = requests.post(url="https://accounts.spotify.com/api/token", data=data)
+        if not response.json().get('access_token', ""):
+            return False
         self.access_token = response.json()['access_token']
-        print("access_token", self.access_token)
+        # if not self.access_token:
+        #     return False
         self.headers = {f'Authorization': f'Bearer {self.access_token}'}
+        return True
     
+    @check_spotify_headers
     def get_spotify_top_artists(self):
         url = "https://api.spotify.com/v1/me/top/artists"
         response = requests.get(url, headers=self.headers)
-        # print("123", response.json())
         return response.json()
     
+    @check_spotify_headers
     def get_me(self):
         url = "https://api.spotify.com/v1/me"
         response = requests.get(url, headers=self.headers)
-        # print("123", response.json())
-        return response.json()
+        result =  response.json()
+        return result
     
+    @check_spotify_headers
     def search_spotify(self, search_params):
         url = "https://api.spotify.com/v1/search"
         # sample search params
@@ -66,6 +84,7 @@ class SpotifyClient:
         print("search results", response.json()["artists"]["items"][0]["id"])
         return response.json()["artists"]["items"][0]["id"]
     
+    @check_spotify_headers
     def get_top_track(self, artist_id):
         url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks?market=US"
         response = requests.get(url, headers=self.headers)
@@ -77,6 +96,7 @@ class SpotifyClient:
         random_track = random.randint(0, len(response.json()["tracks"])-1)
         return response.json()["tracks"][random_track]["id"]
     
+    @check_spotify_headers
     def add_to_playlist(self, playlist_id, track_ids):
         encoded_tracks = urlencode({"uris": track_ids})
         url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?{encoded_tracks}"
@@ -84,6 +104,7 @@ class SpotifyClient:
         print(url)
         print(response.content)
 
+    @check_spotify_headers
     def create_playlist_by_artist(self, artists):
         # search for artist
         artists = sum(artists, [])

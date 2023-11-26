@@ -4,8 +4,6 @@ import ReactDOM from "react-dom/client";
 
 function Upload() {
 
-    console.log("upload");
-
     return (
         <div className="dashboard">
             <p>a component 2</p>
