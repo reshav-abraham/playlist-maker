@@ -53,12 +53,20 @@ def login():
     # which immediately returns a valid redirect
     # 
     result = spotify_client.get_login_redirect()
-    return RedirectResponse(result)
+    return result
 
 @app.get("/home")
 def home():
     result = spotify_client.get_me()
-    return result
+    code = cache.get("access_code", "")
+    return RedirectResponse(f"http://localhost:3000/{code}")
+
+@app.get("/yo")
+def yo(request: Request):
+    print(request)
+    code = request.headers['authorization'].split()[-1]
+    spotify_client.get_spotify_access_token(code)
+    return spotify_client.get_me()
 
 @app.get("/")
 def read_item():
