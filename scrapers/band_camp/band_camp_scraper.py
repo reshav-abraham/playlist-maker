@@ -30,4 +30,4 @@ class BandCampScraper(BaseScraper):
     def scrape_artists(self):
         # good oporutunity for multiprocessing
         # will loop for now
-        return [self.get_artists_by_genre(genre) for genre in sample(GENRES, 12)]
+        return [self.get_artists_by_genre(genre) for genre in sample(GENRES, 10)]

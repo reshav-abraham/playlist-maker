@@ -11,6 +11,7 @@ class SpotifyClient:
         self.redirect_uri = os.environ.get("SPOTIFY_APPROVED_REDIRECT")
         self.scope = os.environ.get("SPOTIFY_SCOPES")
         self.access_token = ""
+        self.code = ""
     
     def check_spotify_headers(func):
         def function_wrapper(spotify_client):
@@ -34,14 +35,14 @@ class SpotifyClient:
         })
         return f'https://accounts.spotify.com/authorize?{query_params}'
     
-    def get_spotify_access_token(self, code):
+    def get_spotify_access_token(self):
         client_id = os.environ.get("SPOTIFY_CLIENT_ID")
         client_secret = os.environ.get("SPOTIFY_CLIENT_SECRET")
         redirect_uri = os.environ.get("SPOTIFY_APPROVED_REDIRECT")
         # state = request.GET.get("state", '')
         data = {
             "grant_type": "authorization_code",
-            "code": code,
+            "code": self.code,
             "redirect_uri": redirect_uri,
             "client_id": client_id,
             "client_secret": client_secret,
@@ -68,7 +69,7 @@ class SpotifyClient:
         result =  response.json()
         return result
     
-    @check_spotify_headers
+    # @check_spotify_headers
     def search_spotify(self, search_params):
         url = "https://api.spotify.com/v1/search"
         # sample search params
@@ -84,7 +85,7 @@ class SpotifyClient:
         print("search results", response.json()["artists"]["items"][0]["id"])
         return response.json()["artists"]["items"][0]["id"]
     
-    @check_spotify_headers
+    # @check_spotify_headers
     def get_top_track(self, artist_id):
         url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks?market=US"
         response = requests.get(url, headers=self.headers)
@@ -96,7 +97,7 @@ class SpotifyClient:
         random_track = random.randint(0, len(response.json()["tracks"])-1)
         return response.json()["tracks"][random_track]["id"]
     
-    @check_spotify_headers
+    # @check_spotify_headers
     def add_to_playlist(self, playlist_id, track_ids):
         encoded_tracks = urlencode({"uris": track_ids})
         url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?{encoded_tracks}"
@@ -104,7 +105,7 @@ class SpotifyClient:
         print(url)
         print(response.content)
 
-    @check_spotify_headers
+    # @check_spotify_headers
     def create_playlist_by_artist(self, artists):
         # search for artist
         artists = sum(artists, [])
