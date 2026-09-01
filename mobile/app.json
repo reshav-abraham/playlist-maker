@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "Playlist Maker",
+    "slug": "playlist-maker",
+    "scheme": "playlistmaker",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#121212"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.playlistmaker.mobile"
+    },
+    "android": {
+      "package": "com.playlistmaker.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#121212"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
