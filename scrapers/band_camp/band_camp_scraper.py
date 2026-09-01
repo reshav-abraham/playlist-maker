@@ -7,7 +7,7 @@ class BandCampScraper(BaseScraper):
     def __init__(self, genre_settings=[]):
         super().__init__()
         self.url = "https://bandcamp.com/"
-        self.genres = sample(GENRES, 4) if len(genre_settings) == 0 else genre_settings
+        self.genres = genre_settings if len(genre_settings) > 0 else sample(GENRES, 10)
 
     def get_artists_by_genre(self, genre):
         print("genre", genre)
@@ -30,4 +30,4 @@ class BandCampScraper(BaseScraper):
     def scrape_artists(self):
         # good oporutunity for multiprocessing
         # will loop for now
-        return [self.get_artists_by_genre(genre) for genre in sample(GENRES, 10)]
+        return [self.get_artists_by_genre(genre) for genre in self.genres]

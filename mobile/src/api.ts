@@ -21,8 +21,20 @@ export async function fetchProfile(): Promise<SpotifyProfile> {
   return response.json();
 }
 
-export async function createPlaylist(): Promise<void> {
-  const response = await fetch(`${API_BASE_URL}/create_playlist`);
+export async function fetchGenres(): Promise<string[]> {
+  const response = await fetch(`${API_BASE_URL}/genres`);
+  if (!response.ok) {
+    throw new Error(`/genres failed with status ${response.status}`);
+  }
+  const data = await response.json();
+  return Array.isArray(data.genres) ? data.genres : [];
+}
+
+export async function createPlaylist(genres: string[] = []): Promise<void> {
+  const params = new URLSearchParams();
+  genres.forEach((genre) => params.append("genres", genre));
+  const query = params.toString();
+  const response = await fetch(`${API_BASE_URL}/create_playlist${query ? `?${query}` : ""}`);
   if (!response.ok) {
     throw new Error(`/create_playlist failed with status ${response.status}`);
   }

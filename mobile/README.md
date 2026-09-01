@@ -1,11 +1,13 @@
 # Playlist Maker — Mobile (Expo / React Native)
 
-A thin client for the existing FastAPI backend (`main.py`). It reuses the
-same three endpoints the web frontend uses:
+A thin client for the existing FastAPI backend (`main.py`). It talks to:
 
 - `GET /login` — opens the Spotify authorization page
 - `GET /getme` — returns the logged-in user's Spotify profile
-- `GET /create_playlist` — scrapes Bandcamp and builds the Spotify playlist
+- `GET /genres` — a curated list of Bandcamp genre tags, for the picker
+- `GET /create_playlist?genres=rock&genres=jazz&...` — scrapes Bandcamp for
+  the given genres (or a random set if none are passed) and builds the
+  Spotify playlist
 
 ## Setup
 
@@ -41,6 +43,13 @@ expected: the access token was already cached server-side by the time that
 last redirect fires. Just close the browser tab and return to the app; it
 automatically re-checks `/getme`, or you can tap "I already logged in —
 refresh".
+
+## Genre picker
+
+Once logged in, the app shows a checkbox grid of genres (from `/genres`).
+Check as many as you like and tap **Create Playlist** to scrape only those
+genres, or tap **🎲 Surprise Me** to clear any selection and let the backend
+pick a random set of genres for you.
 
 ## Notes
 

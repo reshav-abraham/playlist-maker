@@ -1,6 +1,7 @@
-from typing import Union
-from fastapi import FastAPI, Request
+from typing import List, Optional, Union
+from fastapi import FastAPI, Query, Request
 from utils.spotify_client import SpotifyClient
+from utils.constants import CURATED_GENRES, GENRES
 from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -8,7 +9,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from scrapers.band_camp.band_camp_scraper import BandCampScraper
 
 spotify_client = SpotifyClient()
-scraper = BandCampScraper()
 
 app = FastAPI()
 
@@ -80,9 +80,16 @@ def test():
     spotify_client.get_spotify_access_token()
     return spotify_client.get_me()
 
+@app.get("/genres")
+def list_genres():
+    return {"genres": CURATED_GENRES}
+
 @app.get("/create_playlist")
-def create_play_list():
-    artists = scraper.scrape_artists()
+def create_play_list(genres: Optional[List[str]] = Query(default=None)):
+    # only accept genres we actually know about, so a caller can't make us
+    # scrape arbitrary bandcamp.com/tag/<...> paths
+    selected_genres = [genre for genre in (genres or []) if genre in GENRES]
+    artists = BandCampScraper(genre_settings=selected_genres).scrape_artists()
     spotify_client.create_playlist_by_artist(artists)
 
 @app.get("/")
