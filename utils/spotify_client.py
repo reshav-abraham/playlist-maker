@@ -19,8 +19,7 @@ class SpotifyClient:
             if not headers:
                 # check cache for session
                 # raise error to perform redirect again
-                access_token = spotify_client.get_spotify_access_token("")
-                spotify_client.headers = ""
+                spotify_client.get_spotify_access_token()
             return func(spotify_client)
         return function_wrapper
 

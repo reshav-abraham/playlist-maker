@@ -21,11 +21,11 @@ class BandCampScraper(BaseScraper):
         # Will most likely refactor
         artists = [artist_div.text.replace("by", "").strip() for artist_div in html_data.find_all("div", {"class": re.compile('artist')})]
         # will probably filter for good data
-        artists = set(artists)
+        artists = list(set(artists))
         if len(artists) > 4:
-            return sample(artists, 6)
-        print(list(artists))
-        return list(artists)
+            return sample(artists, min(6, len(artists)))
+        print(artists)
+        return artists
     
     def scrape_artists(self):
         # good oporutunity for multiprocessing

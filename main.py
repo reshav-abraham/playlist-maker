@@ -68,7 +68,8 @@ def home():
 def yo(request: Request):
     print(request)
     code = request.headers['authorization'].split()[-1]
-    spotify_client.get_spotify_access_token(code)
+    spotify_client.code = code
+    spotify_client.get_spotify_access_token()
     return spotify_client.get_me()
 
 @app.get("/getme")
